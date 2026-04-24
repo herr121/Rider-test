@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>假面骑士角色类型测试</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Arial";
+  background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  background: #e60023;
+  color: white;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #ff1a3c;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  background: #222;
+}
+
+.option:hover {
+  background: #444;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<script>
+
+let questions = [
+
+{
+text:"至少在人类社会，你的职业是：",
+options:[
+{ text:"无职...", scores:{主骑:2,三骑:1} },
+{ text:"有正经的工作的啦...(心虚）", scores:{四骑:2,第一阶段怪人:1} },
+{ text:"目前的话，是有工作的.", scores:{信息位:2,二骑:1} },
+{ text:"职业？那种东西有必要吗？", scores:{最终BOSS:2,第二阶段怪人:1} }
+]
+},
+
+{
+text:"你被承诺了新的力量！你会：",
+options:[
+{ text:"太可疑了，我才不会用这个", scores:{主骑:2,四骑:1} },
+{ text:"终于！我终于得到了我所需要的！", scores:{二骑:2,最终BOSS:1} },
+{ text:"并非主动使用，但是终究会用的", scores:{三骑:2,第一阶段怪人:1} },
+{ text:"我是给别人力量的那个", scores:{信息位:2} }
+]
+},
+
+{
+text:"不管你的态度如何，你最终还是使用了那个力量，这是因为：",
+options:[
+{ text:"有人正在等着我去帮助他们", scores:{主骑:2,四骑:2} },
+{ text:"这是我的工作我必须这样做", scores:{信息位:2,二骑:1} },
+{ text:"我必须要让那些人看到我的实力", scores:{二骑:2,第二阶段怪人:1} },
+{ text:"都说了我是给别人力量的那个", scores:{信息位:3} }
+]
+},
+
+{
+text:"你的过去",
+options:[
+{ text:"人尽皆知的惨", scores:{主骑:2,四骑:2} },
+{ text:"没人问也没人知道", scores:{三骑:2,信息位:1} },
+{ text:"浑浊一片的过去唯独有那么一件事让你无法忘怀", scores:{二骑:2,第一阶段怪人:2} },
+{ text:"被你所怨恨", scores:{最终BOSS:2,第二阶段怪人:2} }
+]
+},
+
+{
+text:"“麦当劳！麦当劳！麦当劳！”",
+options:[
+{ text:"麦当劳！麦当劳！麦当劳！", scores:{主骑:2} },
+{ text:"开车去麦当劳", scores:{信息位:2} },
+{ text:"不！我们没那个时间了！", scores:{二骑:2,最终BOSS:1} },
+{ text:"开车去麦当劳然后买一杯黑咖啡在所有人失望的眼神中离去", scores:{三骑:2} }
+]
+},
+
+{
+text:"有人试图焦急地对你说些什么，但是她的焦急让你无法理解她想表达什么",
+options:[
+{ text:"给她倒杯水等她冷静下来", scores:{主骑:2,四骑:2} },
+{ text:"进行一个手忙脚乱的安抚", scores:{主骑:1,三骑:1} },
+{ text:"直接告诉对方慢些说否则自己没办法理解对方的意图", scores:{信息位:2,二骑:1} },
+{ text:"我没那么多时间可以浪费在这事情上*走掉*", scores:{最终BOSS:2,第二阶段怪人:2} }
+]
+},
+
+{
+text:"团队产生了冲突，面对理念的不同你的反应是",
+options:[
+{ text:"坚定自己的想法，并且尝试说服他人", scores:{主骑:2,二骑:1} },
+{ text:"XXX是我爹（伪），我跟着他走", scores:{第二阶段怪人:3} },
+{ text:"动摇，但是愤怒，无论是对自己还是对说服了自己的人", scores:{三骑:3} },
+{ text:"平静、沉默、坦然地接受了自己曾经的错误", scores:{第一阶段怪人:3} }
+]
+},
+
+{
+text:"你知道的，在我们这个剧组大家都很容易牺牲自我...",
+options:[
+{ text:"我是以真正的善良之人的身份而献身的", scores:{四骑:3,主骑:1} },
+{ text:"我是伴随着仍有遗憾的心境而献身的", scores:{三骑:2,第一阶段怪人:1} },
+{ text:"我为了我真正的目标而献身的，我绝不后悔", scores:{最终BOSS:3} },
+{ text:"嘻嘻，我要活下去...", scores:{第二阶段怪人:2,信息位:1} }
+]
+},
+
+// ===== 新增题 =====
+
+{
+text:"如果你发现你所相信的一切都是错误的",
+options:[
+{ text:"那就推翻它", scores:{主骑:2,第一阶段怪人:2} },
+{ text:"那我就成为新的正确", scores:{最终BOSS:3} },
+{ text:"……那就继续错下去吧", scores:{第二阶段怪人:2,二骑:1} },
+{ text:"我早就知道会这样", scores:{三骑:2} }
+]
+},
+
+{
+text:"你更接近哪种‘强大’？",
+options:[
+{ text:"守护他人的力量", scores:{主骑:2,四骑:2} },
+{ text:"压倒他人的力量", scores:{二骑:2,最终BOSS:2} },
+{ text:"理解他人的能力", scores:{信息位:2,第一阶段怪人:1} },
+{ text:"连自己都无法控制的力量", scores:{三骑:3} }
+]
+},
+
+{
+text:"你会如何面对一个明显比你更强的敌人？",
+options:[
+{ text:"无论如何都要赢", scores:{主骑:2} },
+{ text:"分析后再行动", scores:{信息位:2,二骑:1} },
+{ text:"先撤退，下次再说", scores:{三骑:2} },
+{ text:"那就成为更强的那一方", scores:{最终BOSS:2,第二阶段怪人:1} }
+]
+},
+
+{
+text:"有人对你说“你是错的”",
+options:[
+{ text:"那我会证明我是对的", scores:{主骑:2} },
+{ text:"……无所谓", scores:{二骑:2,三骑:1} },
+{ text:"也许他说得对", scores:{第一阶段怪人:2} },
+{ text:"那他就不该存在", scores:{最终BOSS:3} }
+]
+},
+
+{
+text:"你怎么看待‘同伴’？",
+options:[
+{ text:"必须守护的人", scores:{主骑:2,四骑:2} },
+{ text:"可以利用的人", scores:{最终BOSS:2} },
+{ text:"麻烦但必要", scores:{二骑:2} },
+{ text:"迟早会失去的人", scores:{三骑:2,第一阶段怪人:1} }
+]
+},
+
+{
+text:"如果可以重来一次，你会？",
+options:[
+{ text:"做出同样的选择", scores:{主骑:2,最终BOSS:2} },
+{ text:"改变某个关键决定", scores:{第一阶段怪人:3} },
+{ text:"……没什么意义", scores:{三骑:2} },
+{ text:"我不会给自己后悔的机会", scores:{二骑:2,第二阶段怪人:1} }
+]
+},
+
+{
+text:"你更像哪种‘存在’？",
+options:[
+{ text:"被需要的人", scores:{主骑:2,四骑:2} },
+{ text:"被畏惧的人", scores:{最终BOSS:2} },
+{ text:"被忽视的人", scores:{三骑:2,信息位:1} },
+{ text:"被支配的人", scores:{第二阶段怪人:3} }
+]
+},
+
+{
+text:"最后一个问题：如果结局注定是悲剧",
+options:[
+{ text:"那也要走到最后", scores:{主骑:2,四骑:2} },
+{ text:"那我就改变结局", scores:{二骑:2,第一阶段怪人:1} },
+{ text:"那就让它更彻底一点", scores:{最终BOSS:3} },
+{ text:"……那就提前结束吧", scores:{三骑:2} }
+]
+}
+
+];
+
+let descriptions = {
+  "主骑": "你也许在世俗概念上称不上成功，也许你只是一个流浪者、无职、或者在职场上屡次碰壁的人。但是你无法任由悲剧发生，并且坚信在绝境中总会有更加深刻的希望。哦，对了，你大概率是红色的。（只是大概率）",
+  "二骑": "你也许有个因你而死的女友，又或者你的身世扑朔迷离。出于某些原因你看起来总是心情不大好，并且嘴里总念叨着赎罪与复仇。不过你的人生中总会出现一些人，让你逐渐意识到生活的美好，让你变得稍微温和了一些。你大概率是蓝色的。",
+  "三骑": "和蓝色的家伙相比你要温和许多。也许是主骑的前辈、竹马，又或者是在某次行动中邂逅了主角团。不过你并不打算和他们长期同行，你有自己的事情要做。大多数时候你被偏爱，有着不错的个人回，会被称作‘真男人’，而且你很大概率是绿色的。",
+  "四骑": "你会死，你自己大概也清楚这一点。你大约在第8到12集出现，以主骑身边唯一一个真正理解他的人存在着。你是剧情的催化剂，让活着的人更加坚定，或者更加迷茫。但死去的你，又如何知晓这一切呢。",
+  "第一阶段怪人": "你会洗白。你会意识到自己一直以来坚持的某些东西存在不协调之处。也许是好奇，也许是某种纯粹的感动，你开始不再遵从那个一直告诉你该怎么做的声音。你不知道未来会走向何处，但当你回过神来，那个红色的家伙已经向你伸出了手。",
+  "第二阶段怪人": "你宣誓效忠。你忠心耿耿地追随着你的首领、主人、偶像。那已经不只是洗脑或利益驱动，而是一种发自内心的信仰。你相信那个未来中会有你的位置，或者即使没有，你也依然为之着迷。",
+  "最终BOSS": "你有着明确而坚定的目标。无论是为了地球、族群，还是你自己的欲望，你都不会轻易放弃。你已经为此准备了很久，不会让一个愣头青轻易终结一切。即使走向同归于尽，你也绝不会退让。"
+};
+
+let candidates = ["主骑","二骑","三骑","四骑","第一阶段怪人","第二阶段怪人","最终BOSS"];
+let scores = {};
+candidates.forEach(c => scores[c] = 0);
+let current = 0;
+
+function showHome(){
+  document.getElementById("app").innerHTML = `
+    <div class="container">
+      <h1>假面骑士角色类型测试</h1>
+      <p>随便写的，假面骑士真好看啊...</p>
+      <button onclick="startTest()">开始测试</button>
+    </div>
+  `;
+}
+
+function startTest(){
+  current = 0;
+  candidates = ["主骑","二骑","三骑","四骑","第一阶段怪人","第二阶段怪人","最终BOSS"];
+  candidates.forEach(c => scores[c] = 0);
+  showQuestion();
+}
+
+function showQuestion(){
+  let q = questions[current];
+  let html = `<div class="container"><h2>${q.text}</h2>`;
+  q.options.forEach((opt,i)=>{
+    html += `<button class="option" onclick="choose(${i})">${opt.text}</button>`;
+  });
+  html += `</div>`;
+  document.getElementById("app").innerHTML = html;
+}
+
+function choose(i){
+  let opt = questions[current].options[i];
+
+  if(opt.filter){
+    candidates = candidates.filter(c => opt.filter.includes(c));
+  }
+
+  if(opt.scores){
+    for(let k in opt.scores){
+      scores[k] += opt.scores[k];
+    }
+  }
+
+  current++;
+
+  if(current < questions.length){
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  let sorted = candidates.sort((a,b)=>scores[b]-scores[a]);
+  let main = sorted[0];
+  let desc = descriptions[main] || "";
+
+  document.getElementById("app").innerHTML = `
+    <div class="container">
+      <h1>测试结果</h1>
+      <h2>${main}</h2>
+      <p>${desc}</p>
+      <button onclick="showHome()">回到首页</button>
+    </div>
+  `;
+}
+
+showHome();
+
+</script>
+</body>
+</html>
